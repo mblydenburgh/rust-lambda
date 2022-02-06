@@ -1,0 +1,61 @@
+name: Deploy CDK Stack
+
+on:
+  push:
+    branchs: [main]
+  # workflow_dispatch:
+
+jobs:
+  aws_cdk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{secrets.AWS_ACCESS_KEY_ID}}
+          aws-secret-access-key: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          aws-region: us-east-1
+
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.17.6' # The Go version to download (if necessary) and use.
+
+      - name: Install Stack Dependencies
+        run: 'sudo npm ci'
+        working-directory: ./deployment
+      
+      - name: Install NPM
+        run: 'sudo apt update -y && sudo apt install nodejs npm -y'
+
+      - name: Install CDK CLI
+        run: 'sudo npm install -g aws-cdk'
+
+      - name: Run Build
+        uses: action/rs-cargo@v1
+        with:
+          command: build
+          args: --release --all-features --target armv7-unknown-linux-gnuabihf
+
+      - name: Zip Code for Deployment
+        run: 'sudo zip -j bin/main.zip bin/*'
+
+      - name: CDK Synth
+        run: 'cdk synth'
+        working-directory: ./deployment
+
+      - name: Run CDK Bootstrap
+        run: 'cdk bootstrap aws://415023725722/us-east-1'
+        working-directory: ./deployment
+
+      - name: CDK Deploy
+        run: 'cdk deploy --require-approval never'
+        working-directory: ./deployment

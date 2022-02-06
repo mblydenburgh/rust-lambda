@@ -27,7 +27,7 @@ async fn handler_fn(event: CustomEvent) -> Result<Value, LambdaError> {
 
     let request = client.put_item()
     .table_name("users")
-    .item("uid", AttributeValue::S(String::from(uuid)))
+    .item("uuid", AttributeValue::S(String::from(uuid)))
     .item("first_name", AttributeValue::S(String::from(event.first_name)))
     .item("last_name", AttributeValue::S(String::from(event.last_name)));
 
