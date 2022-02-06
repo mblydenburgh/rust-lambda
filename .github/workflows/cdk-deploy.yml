@@ -40,7 +40,7 @@ jobs:
         run: 'sudo npm install -g aws-cdk'
 
       - name: Run Build
-        uses: actions/rs-cargo@v1
+        uses: actions-rs/cargo@v1
         with:
           command: build
           args: --release --all-features --target armv7-unknown-linux-gnuabihf
