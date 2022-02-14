@@ -65,7 +65,11 @@ jobs:
         working-directory: ./target/armv7-unknown-linux-gnueabihf/release
 
       - name: Zip Code for Deployment
-        run: 'sudo zip -j target/main.zip target/armv7-unknown-linux-gnueabihf/rust-lambda'
+        run: 'sudo zip -j main.zip rust-lambda'
+        working-directory: ./target/armv7-unknown-linux-gnueabihf/release
+
+      - name: Move zip to target dir
+        run: 'sudo mv ./main.zip ../../main.zip'
 
       - name: CDK Synth
         run: 'cdk synth'
