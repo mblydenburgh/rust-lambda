@@ -3,7 +3,7 @@ name: Deploy CDK Stack
 on: 
   push:
     branchs: [main]
-  # workflow_dispatch:
+  
 
 jobs:
   aws_cdk:
