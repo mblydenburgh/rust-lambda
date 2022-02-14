@@ -44,7 +44,7 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --all-features --target armv7-unknown-linux-gnuabihf
+          args: --release --all-features --target armv7-unknown-linux-gnueabihf
 
       - name: Zip Code for Deployment
         run: 'sudo zip -j bin/main.zip bin/*'
