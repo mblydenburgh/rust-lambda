@@ -70,6 +70,7 @@ jobs:
 
       - name: Move zip to target dir
         run: 'sudo mv ./main.zip ../../main.zip'
+        working-directory: ./target/armv7-unknown-linux-gnueabihf/release
 
       - name: CDK Synth
         run: 'cdk synth'
