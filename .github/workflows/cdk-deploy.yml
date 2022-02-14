@@ -40,7 +40,7 @@ jobs:
       - name: Install CDK CLI
         run: 'sudo npm install -g aws-cdk'
 
-      - name: Install Rustup
+      - name: Install rustup
         run: 'curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh'
 
       - name: Download Rust Build Target
