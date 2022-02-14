@@ -1,8 +1,8 @@
 name: Deploy CDK Stack
 
-on: [push]
-  # push:
-    # branchs: [main]
+on: 
+  push:
+    branchs: [main]
   # workflow_dispatch:
 
 jobs:
