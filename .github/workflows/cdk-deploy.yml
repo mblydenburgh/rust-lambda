@@ -52,8 +52,19 @@ jobs:
           command: build
           args: --release --all-features --target=${{ matrix.target }}
 
+      - name: List current dir contents
+        run: 'ls'
+
+      - name: List target dir
+        run: 'ls'
+        working-directory: ./target
+
+      - name List target release dir
+        run: 'ls'
+        working-directory: ./target/release
+
       - name: Zip Code for Deployment
-        run: 'sudo zip -j target/main.zip target/*'
+        run: 'sudo zip -j target/main.zip target/release/*'
 
       - name: CDK Synth
         run: 'cdk synth'

@@ -39,7 +39,7 @@ export class CdkStack extends cdk.Stack {
             functionName: `${appName}-lambda`,
             runtime: Runtime.FROM_IMAGE,
             role: lambdaRole,
-            code: Code.fromAsset("../bin/main.zip"),
+            code: Code.fromAsset("../target/main.zip"),
             handler: "main"
         })
         lambdaFunction.grantInvoke(new ServicePrincipal("apigateway.amazonaws.com"))
