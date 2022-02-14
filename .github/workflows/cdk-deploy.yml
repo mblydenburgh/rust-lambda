@@ -8,6 +8,10 @@ on:
 jobs:
   aws_cdk:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - armv7-unknown-linux-gnueabihf
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -28,6 +32,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
+          target: ${{ matrix.target }}
           override: true
 
       - name: Install Stack Dependencies
@@ -40,17 +45,18 @@ jobs:
       - name: Install CDK CLI
         run: 'sudo npm install -g aws-cdk'
 
-      - name: Install rustup
-        run: 'curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh'
+      # - name: Install rustup
+      #   run: 'curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh'
 
-      - name: Download Rust Build Target
-        run: 'sudo rustup target add armv7-unknown-linux-gnueabihf'
+      # - name: Download Rust Build Target
+      #   run: 'sudo rustup target add armv7-unknown-linux-gnueabihf'
 
       - name: Run Build
         uses: actions-rs/cargo@v1
         with:
+          use-cross: true
           command: build
-          args: --release --all-features --target armv7-unknown-linux-gnueabihf
+          args: --release --all-features --target=${{ matrix.target }}
 
       - name: Zip Code for Deployment
         run: 'sudo zip -j bin/main.zip bin/*'
