@@ -39,7 +39,7 @@ export class CdkStack extends cdk.Stack {
             functionName: `${appName}-lambda`,
             runtime: Runtime.PROVIDED_AL2,
             role: lambdaRole,
-            code: Code.fromAsset("../target/armv7-unknown-linux-gnueabihf/release/lambda-rust"),
+            code: Code.fromAsset("../target/armv7-unknown-linux-gnueabihf/release/main.zip"),
             handler: "not.required",
             environment: {
                 RUST_BACKTRACE: '1'
