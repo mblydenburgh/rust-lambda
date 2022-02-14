@@ -52,25 +52,13 @@ jobs:
           command: build
           args: --release --all-features --target=${{ matrix.target }}
 
-      - name: List target dir contents
-        run: 'ls'
-        working-directory: ./target
+      # - name: Zip Code for Deployment
+      #   run: 'sudo zip -j main.zip rust-lambda'
+      #   working-directory: ./target/armv7-unknown-linux-gnueabihf/release
 
-      - name: List target release dir
-        run: 'ls'
-        working-directory: ./target/armv7-unknown-linux-gnueabihf
-
-      - name: List target release build-target dir
-        run: 'ls'
-        working-directory: ./target/armv7-unknown-linux-gnueabihf/release
-
-      - name: Zip Code for Deployment
-        run: 'sudo zip -j main.zip rust-lambda'
-        working-directory: ./target/armv7-unknown-linux-gnueabihf/release
-
-      - name: Move zip to target dir
-        run: 'sudo mv ./main.zip ../../main.zip'
-        working-directory: ./target/armv7-unknown-linux-gnueabihf/release
+      # - name: Move zip to target dir
+      #   run: 'sudo mv ./main.zip ../../main.zip'
+      #   working-directory: ./target/armv7-unknown-linux-gnueabihf/release
 
       - name: CDK Synth
         run: 'cdk synth'

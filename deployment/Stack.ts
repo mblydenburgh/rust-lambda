@@ -37,10 +37,13 @@ export class CdkStack extends cdk.Stack {
 
         const lambdaFunction = new Function(this, `LambdaFunction`, {
             functionName: `${appName}-lambda`,
-            runtime: Runtime.FROM_IMAGE,
+            runtime: Runtime.PROVIDED_AL2,
             role: lambdaRole,
-            code: Code.fromAsset("../target/main.zip"),
-            handler: "main"
+            code: Code.fromAsset("../target/armv7-unknown-linux-gnueabihf/release/lambda-rust"),
+            handler: "not.required",
+            environment: {
+                RUST_BACKTRACE: '1'
+            }
         })
         lambdaFunction.grantInvoke(new ServicePrincipal("apigateway.amazonaws.com"))
 
