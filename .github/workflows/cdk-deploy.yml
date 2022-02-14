@@ -58,14 +58,14 @@ jobs:
 
       - name: List target release dir
         run: 'ls'
-        working-directory: ./target/release/armv7-unknown-linux-gnueabihf
+        working-directory: ./target/armv7-unknown-linux-gnueabihf
 
-      # - name: List target release build-target dir
-      #   run: 'ls'
-      #   working-directory: ./target/release/armv7-unknown-linux-gnueabihf/release
+      - name: List target release build-target dir
+        run: 'ls'
+        working-directory: ./target/armv7-unknown-linux-gnueabihf/release
 
       - name: Zip Code for Deployment
-        run: 'sudo zip -j target/main.zip target/release/armv7-unknown-linux-gnueabihf/rust-lambda'
+        run: 'sudo zip -j target/main.zip target/armv7-unknown-linux-gnueabihf/rust-lambda'
 
       - name: CDK Synth
         run: 'cdk synth'
