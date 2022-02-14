@@ -59,7 +59,7 @@ jobs:
         run: 'ls'
         working-directory: ./target
 
-      - name List target release dir
+      - name: List target release dir
         run: 'ls'
         working-directory: ./target/release
 
