@@ -45,12 +45,6 @@ jobs:
       - name: Install CDK CLI
         run: 'sudo npm install -g aws-cdk'
 
-      # - name: Install rustup
-      #   run: 'curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh'
-
-      # - name: Download Rust Build Target
-      #   run: 'sudo rustup target add armv7-unknown-linux-gnueabihf'
-
       - name: Run Build
         uses: actions-rs/cargo@v1
         with:
@@ -59,7 +53,7 @@ jobs:
           args: --release --all-features --target=${{ matrix.target }}
 
       - name: Zip Code for Deployment
-        run: 'sudo zip -j bin/main.zip bin/*'
+        run: 'sudo zip -j target/main.zip target/*'
 
       - name: CDK Synth
         run: 'cdk synth'
