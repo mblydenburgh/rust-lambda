@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         target:
-          - armv7-unknown-linux-gnueabihf
+          - x86_64-unknown-linux-musl
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -54,11 +54,11 @@ jobs:
 
       - name: Rename binary to bootstrap
         run: 'mv ./rust-lambda ./bootstrap'
-        working-directory: ./target/armv7-unknown-linux-gnueabihf/release
+        working-directory: ./target/x86_64-unknown-linux-musl/release
       
       - name: Zip Code for Deployment
         run: 'sudo zip -j lambda.zip bootstrap'
-        working-directory: ./target/armv7-unknown-linux-gnueabihf/release
+        working-directory: ./target/x86_64-unknown-linux-musl/release
 
       - name: CDK Synth
         run: 'cdk synth'
