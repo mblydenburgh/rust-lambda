@@ -52,8 +52,12 @@ jobs:
           command: build
           args: --release --all-features --target=${{ matrix.target }}
 
+      - name: Rename binary to bootstrap
+        uses: 'mv ./rust-lambda ./bootstrap'
+        working-directory: ./target/armv7-unknown-linux-gnueabihf/release
+      
       - name: Zip Code for Deployment
-        run: 'sudo zip -j main.zip rust-lambda'
+        run: 'sudo zip -j lambda.zip bootstrap'
         working-directory: ./target/armv7-unknown-linux-gnueabihf/release
 
       - name: CDK Synth
