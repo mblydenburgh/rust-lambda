@@ -45,7 +45,8 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
         );
 
     println!("executing request {:?}", &request);
-    request.send().await?;
+    let response = request.send().await?;
+    println!("PutItemOutput: {:?}", response);
 
     Ok(json!({"message": "Record written"}))
 }
