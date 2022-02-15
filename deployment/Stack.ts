@@ -40,7 +40,7 @@ export class CdkStack extends cdk.Stack {
             runtime: Runtime.PROVIDED_AL2,
             role: lambdaRole,
             code: Code.fromAsset("../target/armv7-unknown-linux-gnueabihf/release/main.zip"),
-            handler: "not.required",
+            handler: "main",
             environment: {
                 RUST_BACKTRACE: '1'
             }
