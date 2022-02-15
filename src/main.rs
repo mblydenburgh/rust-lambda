@@ -1,8 +1,8 @@
 use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_dynamodb::model::AttributeValue;
 use aws_sdk_dynamodb::Client;
-use lambda_runtime::{Context, Error as LambdaError};
 use lambda_http::{handler, Request};
+use lambda_runtime::{Context, Error as LambdaError};
 use serde::Deserialize;
 use serde_json::{json, Value};
 use uuid::Uuid;
@@ -27,10 +27,8 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
     let client = Client::new(&config);
 
     let body_string: &str = match event.body() {
-        lambda_http::Body::Text(text) => {
-            text.as_str()
-        }
-        _ => ""
+        lambda_http::Body::Text(text) => text.as_str(),
+        _ => "",
     };
     println!("Body string: {}", body_string);
 
@@ -43,13 +41,14 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
         .item("uuid", AttributeValue::S(uuid))
         .item(
             "first_name",
-            AttributeValue::S(custom_event.first_name),
+            AttributeValue::S(custom_event.first_name.into()),
         )
         .item(
             "last_name",
-            AttributeValue::S(custom_event.last_name),
+            AttributeValue::S(custom_event.last_name.into()),
         );
 
+    println!("executing request {:?}", request);
     request.send().await?;
 
     Ok(json!({"message": "Record written"}))
