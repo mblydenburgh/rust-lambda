@@ -19,7 +19,7 @@ export class CdkStack extends cdk.Stack {
         })
 
         const lambdaRole = new Role(this, `LambdaRole`, {
-            roleName: "LambdaExecutionRole",
+            roleName: `${appName}-role`,
             assumedBy: new ServicePrincipal("lambda.amazonaws.com"),
             managedPolicies: [
                 ManagedPolicy.fromAwsManagedPolicyName("service-role/AWSLambdaVPCAccessExecutionRole")
