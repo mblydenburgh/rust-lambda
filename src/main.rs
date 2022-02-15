@@ -33,7 +33,7 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
 
     let request = client
         .put_item()
-        .table_name("rust-lambda-test-table")
+        .table_name("rust-lambda-table")
         .item("uuid", AttributeValue::S(uuid))
         .item(
             "first_name",
