@@ -33,22 +33,22 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
     println!("Body string: {}", body_string);
 
     let custom_event: CustomEvent = serde_json::from_str(body_string)?;
-    println!("serialized event: {:?}", custom_event);
+    println!("serialized event: {:?}", &custom_event);
 
     let request = client
         .put_item()
-        .table_name("users")
+        .table_name("rust-lambda-test-table")
         .item("uuid", AttributeValue::S(uuid))
         .item(
             "first_name",
-            AttributeValue::S(custom_event.first_name.into()),
+            AttributeValue::S(custom_event.first_name),
         )
         .item(
             "last_name",
-            AttributeValue::S(custom_event.last_name.into()),
+            AttributeValue::S(custom_event.last_name),
         );
 
-    println!("executing request {:?}", request);
+    println!("executing request {:?}", &request);
     request.send().await?;
 
     Ok(json!({"message": "Record written"}))
