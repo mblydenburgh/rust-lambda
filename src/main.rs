@@ -19,11 +19,13 @@ struct CustomEvent {
     last_name: String,
 }
 
-async fn handler_fun(event: CustomEvent, _c: Context) -> Result<Value, LambdaError> {
+async fn handler_fun(event: Value, _c: Context) -> Result<Value, LambdaError> {
     let uuid = Uuid::new_v4().to_string();
     let region_provider = RegionProviderChain::default_provider().or_else("us-east-1");
     let config = aws_config::from_env().region(region_provider).load().await;
     let client = Client::new(&config);
+
+    let user_event: CustomEvent = serde_json::from_value(event).unwrap();
 
     let request = client
         .put_item()
@@ -31,11 +33,11 @@ async fn handler_fun(event: CustomEvent, _c: Context) -> Result<Value, LambdaErr
         .item("uuid", AttributeValue::S(String::from(uuid)))
         .item(
             "first_name",
-            AttributeValue::S(String::from(event.first_name)),
+            AttributeValue::S(String::from(user_event.first_name)),
         )
         .item(
             "last_name",
-            AttributeValue::S(String::from(event.last_name)),
+            AttributeValue::S(String::from(user_event.last_name)),
         );
 
     request.send().await?;
