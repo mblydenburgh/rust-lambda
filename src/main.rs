@@ -13,7 +13,7 @@ async fn main() -> Result<(), LambdaError> {
     Ok(())
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 struct CustomEvent {
     first_name: String,
     last_name: String,
@@ -35,21 +35,41 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
     println!("Body string: {}", body_string);
 
     let custom_event: CustomEvent = serde_json::from_str(body_string)?;
+    println!("serialized event: {:?}", custom_event);
 
     let request = client
         .put_item()
         .table_name("users")
-        .item("uuid", AttributeValue::S(String::from(uuid)))
+        .item("uuid", AttributeValue::S(uuid))
         .item(
             "first_name",
-            AttributeValue::S(String::from(custom_event.first_name)),
+            AttributeValue::S(custom_event.first_name),
         )
         .item(
             "last_name",
-            AttributeValue::S(String::from(custom_event.last_name)),
+            AttributeValue::S(custom_event.last_name),
         );
 
     request.send().await?;
 
     Ok(json!({"message": "Record written"}))
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn converts_payload_to_event() {
+        let body_string = r#"
+        {
+            "first_name":"first",
+            "last_name":"last"
+            }
+        "#;
+
+        let event: CustomEvent = serde_json::from_str(body_string).unwrap();
+
+        assert!(event.first_name == "first");
+        assert!(event.last_name == "last");
+    }
 }
