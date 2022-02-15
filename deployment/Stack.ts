@@ -29,7 +29,7 @@ export class CdkStack extends cdk.Stack {
         dynamoTable.grantReadWriteData(lambdaRole)
         lambdaRole.addToPolicy(new PolicyStatement({
             effect: Effect.ALLOW,
-            actions: ["dynamodb:query"],
+            actions: ["dynamodb:query", "dynamodb:scan", "dynamodb:getItem", "dynamodb:putItem", "dynamodb:deleteItem"],
             resources: [
                 `arn:aws:dynamodb:${Aws.REGION}:${Aws.ACCOUNT_ID}:table/${dynamoTable.tableName}/index/*`
             ]

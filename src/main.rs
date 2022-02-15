@@ -20,7 +20,6 @@ struct CustomEvent {
 }
 
 async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> {
-    println!("event received: {:?}", event);
     let uuid = Uuid::new_v4().to_string();
     let region_provider = RegionProviderChain::default_provider().or_else("us-east-1");
     let config = aws_config::from_env().region(region_provider).load().await;
@@ -30,10 +29,7 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
         lambda_http::Body::Text(text) => text.as_str(),
         _ => "",
     };
-    println!("Body string: {}", body_string);
-
     let custom_event: CustomEvent = serde_json::from_str(body_string)?;
-    println!("serialized event: {:?}", &custom_event);
 
     let request = client
         .put_item()
