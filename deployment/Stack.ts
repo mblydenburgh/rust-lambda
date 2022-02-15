@@ -9,7 +9,7 @@ export class CdkStack extends cdk.Stack {
     constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
         super(scope, id, props);
 
-        const appName = "rust-lambda-test"
+        const appName = "rust-lambda"
 
         const dynamoTable = new Table(this, `DynamoTable`, {
             tableName: `${appName}-table`,
@@ -50,7 +50,7 @@ export class CdkStack extends cdk.Stack {
         const lambdaIntegration = new HttpLambdaIntegration("HttpLambdaIntegration", lambdaFunction)
 
         const api = new HttpApi(this, `RestAPIGateway`, {
-            apiName: "rust-api",
+            apiName: "rust-lambda-api",
             corsPreflight: {
                 allowHeaders: ['Authorization', 'Access-Control-Allow-Origin','Access-Control-Allow-Headers','Content-Type',"X-Api-Key","X-Amz-Security-Token"],
                 allowMethods: [
