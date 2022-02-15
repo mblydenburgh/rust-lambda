@@ -14,7 +14,7 @@ async fn main() -> Result<(), LambdaError> {
 }
 
 #[derive(Deserialize, Debug)]
-struct CustomEvent {
+struct AddUserEvent {
     first_name: String,
     last_name: String,
 }
@@ -29,7 +29,7 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
         lambda_http::Body::Text(text) => text.as_str(),
         _ => "",
     };
-    let custom_event: CustomEvent = serde_json::from_str(body_string)?;
+    let custom_event: AddUserEvent = serde_json::from_str(body_string)?;
 
     let request = client
         .put_item()
@@ -44,10 +44,8 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
             AttributeValue::S(custom_event.last_name),
         );
 
-    println!("executing request {:?}", &request);
-    let response = request.send().await?;
-    println!("PutItemOutput: {:?}", response);
-
+    
+    request.send().await?;
     Ok(json!({"message": "Record written"}))
 }
 #[cfg(test)]
@@ -63,7 +61,7 @@ mod tests {
             }
         "#;
 
-        let event: CustomEvent = serde_json::from_str(body_string).unwrap();
+        let event: AddUserEvent = serde_json::from_str(body_string).unwrap();
 
         assert!(event.first_name == "first");
         assert!(event.last_name == "last");
