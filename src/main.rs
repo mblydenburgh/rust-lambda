@@ -9,18 +9,18 @@ use uuid::Uuid;
 
 #[tokio::main]
 async fn main() -> Result<(), LambdaError> {
-    lambda_runtime::run(handler(handler_fun)).await?;
+    lambda_runtime::run(handler(handler_func)).await?;
     Ok(())
 }
 
 #[derive(Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
 struct AddUserEvent {
     first_name: String,
     last_name: String,
 }
 
-async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> {
-    let uuid = Uuid::new_v4().to_string();
+async fn handler_func(event: Request, _c: Context) -> Result<Value, LambdaError> {
     let region_provider = RegionProviderChain::default_provider().or_else("us-east-1");
     let config = aws_config::from_env().region(region_provider).load().await;
     let client = Client::new(&config);
@@ -29,7 +29,8 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
         lambda_http::Body::Text(text) => text.as_str(),
         _ => "",
     };
-    let custom_event: AddUserEvent = serde_json::from_str(body_string)?;
+    let add_user_event: AddUserEvent = serde_json::from_str(body_string)?;
+    let uuid = Uuid::new_v4().to_string();
 
     let request = client
         .put_item()
@@ -37,11 +38,11 @@ async fn handler_fun(event: Request, _c: Context) -> Result<Value, LambdaError> 
         .item("uuid", AttributeValue::S(uuid))
         .item(
             "first_name",
-            AttributeValue::S(custom_event.first_name),
+            AttributeValue::S(add_user_event.first_name),
         )
         .item(
             "last_name",
-            AttributeValue::S(custom_event.last_name),
+            AttributeValue::S(add_user_event.last_name),
         );
 
     
