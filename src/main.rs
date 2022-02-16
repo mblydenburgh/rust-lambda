@@ -3,7 +3,7 @@ use aws_sdk_dynamodb::model::AttributeValue;
 use aws_sdk_dynamodb::Client;
 use lambda_http::{handler, Request};
 use lambda_runtime::{Context, Error as LambdaError};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use uuid::Uuid;
 
@@ -13,10 +13,12 @@ async fn main() -> Result<(), LambdaError> {
     Ok(())
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct AddUserEvent {
+    #[serde(rename = "firstName")]
     first_name: String,
+    #[serde(rename = "lastName")]
     last_name: String,
 }
 
@@ -30,6 +32,7 @@ async fn handler_func(event: Request, _c: Context) -> Result<Value, LambdaError>
         _ => "",
     };
     let add_user_event: AddUserEvent = serde_json::from_str(body_string)?;
+    let user_json = serde_json::to_value(&add_user_event).unwrap();
     let uuid = Uuid::new_v4().to_string();
 
     let request = client
@@ -47,7 +50,7 @@ async fn handler_func(event: Request, _c: Context) -> Result<Value, LambdaError>
 
     
     request.send().await?;
-    Ok(json!({"message": "Record written"}))
+    Ok(json!(user_json))
 }
 #[cfg(test)]
 mod tests {
