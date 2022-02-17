@@ -16,9 +16,7 @@ async fn main() -> Result<(), LambdaError> {
 #[derive(Deserialize, Serialize, Debug)]
 #[serde(rename_all = "camelCase")]
 struct AddUserEvent {
-    #[serde(rename = "firstName")]
     first_name: String,
-    #[serde(rename = "lastName")]
     last_name: String,
 }
 
