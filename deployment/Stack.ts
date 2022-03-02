@@ -14,7 +14,7 @@ export class CdkStack extends cdk.Stack {
         const dynamoTable = new Table(this, `DynamoTable`, {
             tableName: `${appName}-table`,
             partitionKey: { name: "uuid", type: AttributeType.STRING },
-            sortKey: { name: "last_name", type: AttributeType.STRING },
+            sortKey: { name: "modelTypeAndId", type: AttributeType.STRING },
             billingMode: BillingMode.PAY_PER_REQUEST
         })
 
@@ -52,7 +52,7 @@ export class CdkStack extends cdk.Stack {
         const api = new HttpApi(this, `RestAPIGateway`, {
             apiName: "rust-lambda-api",
             corsPreflight: {
-                allowHeaders: ['Authorization', 'Access-Control-Allow-Origin','Access-Control-Allow-Headers','Content-Type',"X-Api-Key","X-Amz-Security-Token"],
+                allowHeaders: ['Authorization', 'Access-Control-Allow-Origin','Access-Control-Allow-Headers','Content-Type'],
                 allowMethods: [
                     CorsHttpMethod.ANY
                 ],
@@ -62,13 +62,13 @@ export class CdkStack extends cdk.Stack {
 
         api.addRoutes({
             path: "/users",
-            methods: [HttpMethod.ANY],
+            methods: [HttpMethod.GET, HttpMethod.POST],
             integration: lambdaIntegration
         })
 
         api.addRoutes({
             path: "/users/{proxy+}",
-            methods: [HttpMethod.ANY],
+            methods: [HttpMethod.GET, HttpMethod.POST],
             integration: lambdaIntegration
         })
     }
