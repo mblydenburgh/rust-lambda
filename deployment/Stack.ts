@@ -18,6 +18,7 @@ export class CdkStack extends cdk.Stack {
             billingMode: BillingMode.PAY_PER_REQUEST
         })
 
+        
         const lambdaRole = new Role(this, `LambdaRole`, {
             roleName: `${appName}-role`,
             assumedBy: new ServicePrincipal("lambda.amazonaws.com"),
