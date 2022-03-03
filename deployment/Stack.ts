@@ -13,7 +13,7 @@ export class CdkStack extends cdk.Stack {
 
         const dynamoTable = new Table(this, `DynamoTable`, {
             tableName: `${appName}-table`,
-            partitionKey: { name: "uuid", type: AttributeType.STRING },
+            partitionKey: { name: "userId", type: AttributeType.STRING },
             sortKey: { name: "modelTypeAndId", type: AttributeType.STRING },
             billingMode: BillingMode.PAY_PER_REQUEST
         })

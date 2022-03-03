@@ -35,11 +35,11 @@ async fn handler_func(event: Request, _c: Context) -> Result<Value, LambdaError>
     let result = match event.method() {
         &lambda_http::http::method::Method::GET => {
             println!("Handling GET request");
-            get_user(client, body_string).await?
+            json!(get_user(&client, body_string).await?)
         }
         &lambda_http::http::method::Method::POST => {
             println!("Handling POST request");
-            create_user(client, body_string).await?
+            json!(create_user(&client, body_string).await?)
         }
         &lambda_http::http::method::Method::DELETE => {
             println!("Handling DELETE request");

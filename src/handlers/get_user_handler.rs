@@ -9,7 +9,7 @@ use crate::{
     }
 };
 
-pub async fn get_user(client: Client, id: &str) -> Result<Value, LambdaError> {
+pub async fn get_user(client: &Client, id: &str) -> Result<Value, LambdaError> {
     println!("Getting user with id {}", id);
 
     let request = client
