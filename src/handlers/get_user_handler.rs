@@ -20,13 +20,20 @@ pub async fn get_user(client: &Client, id: &str) -> Result<Value, LambdaError> {
         .expression_attribute_values(":uuid", AttributeValue::S(id.to_string()));
 
         let result = request.send().await?;
-
         println!("query result: {:?}", result);
-        let user: User = User {
-            uuid: String::from(""),
-            first_name: String::from(""),
-            last_name: String::from("")
+        let user = match result.items.unwrap().first() {
+            Some(res) => User {
+                uuid: res.get("userId").unwrap().as_s().unwrap().clone(),
+                first_name: res.get("first_name").unwrap().as_s().unwrap().clone(),
+                last_name: res.get("last_name").unwrap().as_s().unwrap().clone()
+            },
+            _ => User {
+                uuid: String::from(""),
+                first_name: String::from(""),
+                last_name: String::from("")
+            }
         };
+        
         let user_json = serde_json::to_value(&user).unwrap();
         Ok(user_json)
 }
