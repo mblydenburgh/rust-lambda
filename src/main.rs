@@ -1,6 +1,6 @@
 use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_dynamodb::Client;
-use lambda_http::{handler, Request};
+use lambda_http::{handler, Request, RequestExt};
 use lambda_runtime::{Context, Error as LambdaError};
 use serde_json::{json, Value};
 
@@ -18,6 +18,7 @@ use self::{
 
 #[tokio::main]
 async fn main() -> Result<(), LambdaError> {
+    let func =
     lambda_runtime::run(handler(handler_func)).await?;
     Ok(())
 }
@@ -31,11 +32,13 @@ async fn handler_func(event: Request, _c: Context) -> Result<Value, LambdaError>
         lambda_http::Body::Text(text) => text.as_str(),
         _ => "",
     };
+    
 
     let result = match event.method() {
         &lambda_http::http::method::Method::GET => {
             println!("Handling GET request");
-            json!(get_user(&client, body_string).await?)
+            
+            json!(get_user(&client, event.query_string_parameters().get("id").unwrap()).await?)
         }
         &lambda_http::http::method::Method::POST => {
             println!("Handling POST request");
