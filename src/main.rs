@@ -54,7 +54,7 @@ async fn handler_func(event: Request, _c: Context) -> Result<Value, LambdaError>
             json!("other")
         }
     };
-    
+    println!("result: {}", &result);
 
     Ok(json!(result))
 }
