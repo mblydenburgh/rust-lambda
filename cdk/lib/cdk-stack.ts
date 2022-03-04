@@ -43,7 +43,7 @@ export class CdkStack extends cdk.Stack {
       functionName: `${appName}-lambda`,
       runtime: Runtime.PROVIDED_AL2,
       role: lambdaRole,
-      code: Code.fromAsset("../target/x86_64-unknown-linux-musl/release/lambda.zip"),
+      code: Code.fromAsset("../../target/x86_64-unknown-linux-musl/release/lambda.zip"),
       handler: "main",
       environment: {
         RUST_BACKTRACE: '1'
