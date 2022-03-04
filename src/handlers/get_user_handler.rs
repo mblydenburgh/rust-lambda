@@ -2,6 +2,7 @@ use serde_json::Value;
 use aws_sdk_dynamodb::model::AttributeValue;
 use aws_sdk_dynamodb::Client;
 use lambda_runtime::{Error as LambdaError};
+use log::{info};
 
 use crate::{
     models::{
@@ -10,7 +11,7 @@ use crate::{
 };
 
 pub async fn get_user(client: &Client, id: &str) -> Result<Value, LambdaError> {
-    println!("Getting user {}", id);
+    info!("Getting user {}", id);
 
     let request = client
         .query()

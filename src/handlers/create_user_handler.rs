@@ -1,5 +1,6 @@
 use aws_sdk_dynamodb::model::AttributeValue;
 use aws_sdk_dynamodb::Client;
+use log::info;
 use serde_json::{json, Value};
 use lambda_runtime::{Error as LambdaError};
 use uuid::Uuid;
@@ -12,7 +13,7 @@ use crate::{
 
 pub async fn create_user(client: &Client, payload: &str) -> Result<Value, LambdaError> {
     let uuid = Uuid::new_v4().to_string();
-    println!("Creating user {}", &uuid);
+    info!("Creating user {}", &uuid);
     let add_user_event: AddUserEvent = serde_json::from_str(payload)?;
     
     let request = client
