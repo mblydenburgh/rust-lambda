@@ -14,7 +14,6 @@ pub async fn create_user(client: &Client, payload: &str) -> Result<Value, Lambda
     let uuid = Uuid::new_v4().to_string();
     println!("Creating user {}", &uuid);
     let add_user_event: AddUserEvent = serde_json::from_str(payload)?;
-    println!("User from payload: {:?}", &add_user_event);
     
     let request = client
         .put_item()
@@ -35,6 +34,5 @@ pub async fn create_user(client: &Client, payload: &str) -> Result<Value, Lambda
         last_name: add_user_event.last_name
     };
     let user_json = serde_json::to_value(&created_user).unwrap();
-    println!("User json: {}", &user_json);
     Ok(json!(user_json))
 }

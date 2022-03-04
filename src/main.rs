@@ -18,7 +18,6 @@ use self::{
 
 #[tokio::main]
 async fn main() -> Result<(), LambdaError> {
-    let func =
     lambda_runtime::run(handler(handler_func)).await?;
     Ok(())
 }
@@ -34,32 +33,28 @@ async fn handler_func(event: Request, _c: Context) -> Result<Value, LambdaError>
     };
     
 
-    let result = match event.method() {
+    let result: Option<Value> = match event.method() {
         &lambda_http::http::method::Method::GET => {
-            println!("Handling GET request");
-            
-            json!(get_user(&client, event.query_string_parameters().get("id").unwrap()).await?)
+            Some(json!(get_user(&client, event.query_string_parameters().get("id").unwrap()).await?))
         }
         &lambda_http::http::method::Method::POST => {
-            println!("Handling POST request");
-            json!(create_user(&client, body_string).await?)
+            Some(json!(create_user(&client, body_string).await?))
         }
         &lambda_http::http::method::Method::DELETE => {
-            println!("Handling DELETE request");
-            json!("delete")
+            Some(json!("delete"))
         }
         &lambda_http::http::method::Method::PUT => {
-            println!("Handling PUT request");
-            json!("put")
+            Some(json!("put"))
         }
         _ => {
-            println!("Handling other request");
-            json!("other")
+            None
         }
     };
-    println!("result: {}", &result);
-
-    Ok(json!(result))
+    
+    match result {
+        Some(value) => Ok(json!(value)),
+        None => Ok(json!("Unsupported HTTP Method"))
+    }
 }
 #[cfg(test)]
 mod tests {

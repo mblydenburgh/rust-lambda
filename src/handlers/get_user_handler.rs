@@ -10,7 +10,7 @@ use crate::{
 };
 
 pub async fn get_user(client: &Client, id: &str) -> Result<Value, LambdaError> {
-    println!("Getting user with id {}", id);
+    println!("Getting user {}", id);
 
     let request = client
         .query()
@@ -20,7 +20,6 @@ pub async fn get_user(client: &Client, id: &str) -> Result<Value, LambdaError> {
         .expression_attribute_values(":uuid", AttributeValue::S(id.to_string()));
 
         let result = request.send().await?;
-        println!("query result: {:?}", result);
         let user = match result.items.unwrap().first() {
             Some(res) => User {
                 uuid: res.get("userId").unwrap().as_s().unwrap().clone(),
