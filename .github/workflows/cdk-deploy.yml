@@ -37,7 +37,7 @@ jobs:
 
       - name: Install Stack Dependencies
         run: 'sudo npm ci'
-        working-directory: ./deployment
+        working-directory: ./cdk
       
       - name: Install NPM
         run: 'sudo apt update -y && sudo apt install nodejs npm -y'
@@ -62,12 +62,12 @@ jobs:
 
       - name: CDK Synth
         run: 'cdk synth'
-        working-directory: ./deployment
+        working-directory: ./cdk
 
       - name: Run CDK Bootstrap
         run: 'cdk bootstrap aws://415023725722/us-east-1'
-        working-directory: ./deployment
+        working-directory: ./cdk
 
       - name: CDK Deploy
         run: 'cdk deploy --require-approval never'
-        working-directory: ./deployment
+        working-directory: ./cdk
