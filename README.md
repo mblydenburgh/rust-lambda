@@ -9,5 +9,3 @@ be taken into account in order to successfully deploy.
 - AWS is expecting an binary executable named `bootstrap`
 - Code asset is a zip file with the single bootstrap binary
 - Lambda runtime is set to `PROVIDED.AL2` for Amazon Linux 2
-
-Note: In order to build locally, please have Nightly Rust installd.
