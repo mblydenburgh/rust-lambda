@@ -1,5 +1,5 @@
-import { Stack, StackProps } from 'aws-cdk-lib';
-import { Construct } from 'constructs';
+import cdk = require('@aws-cdk/core');
+
 import { Code, Function, Runtime } from "@aws-cdk/aws-lambda"
 import { Effect, ManagedPolicy, PolicyStatement, Role, ServicePrincipal } from '@aws-cdk/aws-iam';
 import { AttributeType, BillingMode, Table } from "@aws-cdk/aws-dynamodb"
@@ -7,8 +7,8 @@ import { CorsHttpMethod, HttpApi, HttpMethod } from "@aws-cdk/aws-apigatewayv2"
 import { HttpLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations"
 import { Aws } from '@aws-cdk/core';
 
-export class CdkStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+export class CdkStack extends cdk.Stack {
+  constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
     const appName = "rust-lambda"
