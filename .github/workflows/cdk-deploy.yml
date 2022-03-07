@@ -2,7 +2,7 @@ name: Deploy CDK Stack
 
 on: 
   push:
-    branchs: [main, routing]
+    branchs: [main]
   
 
 jobs:
